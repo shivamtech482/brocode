@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsive Upload Site</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+      margin: 0;
+    }
+
+    .box {
+      background: #fff;
+      padding: 20px;
+      max-width: 450px;
+      margin: auto;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    button {
+      background: #0078ff;
+      color: white;
+      border: none;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: #005fcc;
+      cursor: pointer;
+    }
+
+    #uploadSection {
+      display: none;
+    }
+
+    img, video {
+      width: 100% !important;
+      height: auto;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .upload-block {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 12px;
+      background: #fafafa;
+      position: relative;
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: red;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background: darkred;
+    }
+
+    @media (max-width: 500px) {
+      .box {
+        width: 95%;
+        padding: 15px;
+      }
+
+      input, button {
+        font-size: 15px;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Section -->
+  <div class="box" id="loginBox">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Enter username" />
+    <button onclick="login()">Login</button>
+  </div>
+
+  <!-- Upload Section -->
+  <div class="box" id="uploadSection">
+    <h2>Upload Photos & Videos</h2>
+    <input type="file" id="fileInput" multiple accept="image/*,video/*" />
+    <button onclick="previewFiles()">Upload</button>
+
+    <h3 style="margin-top:20px;">All Uploads</h3>
+    <div id="preview"></div>
+  </div>
+
+  <script>
+    function login() {
+      const user = document.getElementById('username').value.toLowerCase();
+      if (user === 'shivam' || user === 'uttam') {
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('uploadSection').style.display = 'block';
+      } else {
+        alert("Invalid username");
+      }
+    }
+
+    function previewFiles() {
+      const files = document.getElementById('fileInput').files;
+      const preview = document.getElementById('preview');
+
+      // Create block for this upload
+      let block = document.createElement('div');
+      block.className = "upload-block";
+
+      // Delete button
+      let delBtn = document.createElement('button');
+      delBtn.className = "delete-btn";
+      delBtn.textContent = "Delete";
+      delBtn.onclick = () => block.remove();
+
+      block.appendChild(delBtn);
+      preview.appendChild(block);
+
+      for (let file of files) {
+        let url = URL.createObjectURL(file);
+
+        if (file.type.startsWith('image')) {
+          let img = document.createElement('img');
+          img.src = url;
+          block.appendChild(img);
+
+        } else if (file.type.startsWith('video')) {
+          let video = document.createElement('video');
+          video.src = url;
+          video.controls = true;
+          block.appendChild(video);
+        }
+      }
+
+      // Reset upload box
+      document.getElementById('fileInput').value = "";
+    }
+  </script>
+
+</body>
+</html>
